@@ -6,7 +6,7 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 17:42:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/25 17:59:42 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/25 18:07:10 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,17 @@ bool	is_arg(char c1, char c2)
 int	put_arg(va_list ap, char arg, int *len)
 {
 	if (arg == 'c')
-		ft_putstr_fd(ap, 1);
+		*len += printf_putchr(&ap);
+	else if (arg == 's')
+		*len += ft_strlen(ap
 
+}
 
+int	printf_putchr(char c)
+{
+	write(1, &c, 1);
+	return (1);
+}
 
 int	ft_printf(char const *str, ...)
 {
@@ -48,10 +56,7 @@ int	ft_printf(char const *str, ...)
 		else if (str[i] == '%')
 			return (-1);	// gestionar el %
 		else
-		{
-			ft_putchar_fd(str[i++], 1);
-			len++;
-		}
+			len += printf_putchr(str[i++]);
 	}
 	va_end(ap);
 	return (len);
