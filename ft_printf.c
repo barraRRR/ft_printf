@@ -6,7 +6,7 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 17:42:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/26 21:44:47 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/26 22:17:08 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,35 @@ bool	arg_parser(va_list *ap, char arg, int *len)
 		return(printf_putuphex(ap, len));
 }
 
-bool	printf_puthex(va_list *ap, size_t len)
+void	to_hex(char *buf, unsigned int n)
 {
-	unsigned int		n;
 	char				*hex;
 
-	hex = "0123456789abcde";
+	hex = "0123456789abcdef";
+	if (n >= 16)
+		to_hex(buf, n / 16);
+	ft_strlcat(buf, &hex[n % 16], 20); // ojo que no entra porque no va a contar bien destlen
+}
+
+bool	printf_puthex(va_list *ap, size_t *len)
+{
+	unsigned int		n;
+	char				*buf;
+
 	n = va_arg(*ap, unsigned int);
+	buf = malloc(sizeof(char) * 20);
+	if (!buf)
+		return (false);
+	ft_memset(buf, 0, 20);
+	to_hex(buf, n);
+	*len += ft_strlen(buf);
+	ft_putstr(buf);
+	free(buf);
+	return (true);
+}
+
+
+
 
 
 
