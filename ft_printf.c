@@ -6,7 +6,7 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 17:42:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/25 18:07:10 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/26 17:00:04 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,46 @@ bool	is_arg(char c1, char c2)
 	return (false);
 }
 
-int	put_arg(va_list ap, char arg, int *len)
+bool	put_arg(va_list ap, char arg, int *len)
 {
 	if (arg == 'c')
-		*len += printf_putchr(&ap);
+		return(printf_putchr(ap, len));
 	else if (arg == 's')
-		*len += ft_strlen(ap
-
+		return(printf_putstr(ap, len));
+	else if (arg == 'p')
+		return(printf_putptr(ap, len));
+	else if (arg == 'd')
+		return(printf_putdig(ap, len));
+	else if (arg == 'i')
+		return(printf_putdig(ap, len));
+	else if (arg == 'u')
+		return(printf_putdig(ap, len)); // unsigned
+	else if (arg == 'x')
+		return(printf_puthex(ap, len));
+	else if (arg == 'X')
+		return(printf_putuphex(ap, len));
 }
 
-int	printf_putchr(char c)
+bool	printf_putchr(char c, size_t *len)
 {
-	write(1, &c, 1);
-	return (1);
+	if (write(1, &c, 1) < 0)
+		return (false);
+	(*len)++;
+	return (true);
 }
+
+bool	printf_putstr(char *str, size_t *len)
+{
+	*len *= ft_strlen(str);
+	ft_putstr(str);
+	return (true);
+}
+
+bool	printf_putdig(long nbr, size_t *len)
+{
+	char	*str;
+
+	str = printf_itol(long nbr);
 
 int	ft_printf(char const *str, ...)
 {

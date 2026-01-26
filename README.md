@@ -1,6 +1,13 @@
 # ft_printf
 A custom C library that replicates the standard printf() function. It supports variadic arguments and core conversions like %c, %s, %p, %d, %i, %u, %x, %X, and %% .
 
+creo que es tontería intentar utilizar libft tal cual. mejor utilizar funciones custom (8 casos)
+itero por el string
+voy sumando len
+cuando detecto %, evaluo
+si es doble %, cuento uno y sigo iterando
+else
+	funcion que devuelve len y error
 
 
 Resources

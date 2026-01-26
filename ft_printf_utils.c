@@ -1,35 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/23 17:44:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/26 13:35:21 by jbarreir         ###   ########.fr       */
+/*   Created: 2026/01/26 13:35:08 by jbarreir          #+#    #+#             */
+/*   Updated: 2026/01/26 13:35:12 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINT_F
+#include "ft_printf.h"
+#include "libft/libft.h"
 
-// *********** INCLUDES ************
-# include <unistd.h>
-# include <stdarg.h>
-# include <stdlib.h>
-# include <stdbool.h>
-
-// ************ DEFINES ************
-
-// ********* DATA STRUCTS **********
-
-typedef enum
-{
-	OK,
-	MALLOC_ERROR,
-}	e_error;
-
-
-// ********** PROTOTYPES ***********
-
-#endif
