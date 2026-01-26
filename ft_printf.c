@@ -6,31 +6,31 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 17:42:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/26 17:00:04 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/26 21:44:47 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft/libft.h"
 
-bool	is_arg(char c1, char c2)
+bool	is_arg(char c2)
 {
-	if (c1 == '%' && (c2 == 'c' || c2 == 's' || c2 == 'p' || c2 == 'd'
-		|| c2 == 'i' || c2 == 'u' || c2 == 'x' || c2 == 'X' || c2 == '%'))
+	if (c2 == 'c' || c2 == 's' || c2 == 'p' || c2 == 'd'
+		|| c2 == 'i' || c2 == 'u' || c2 == 'x' || c2 == 'X' || c2 == '%')
 		return (true);
 	return (false);
 }
 
-bool	put_arg(va_list ap, char arg, int *len)
+bool	arg_parser(va_list *ap, char arg, int *len)
 {
-	if (arg == 'c')
-		return(printf_putchr(ap, len));
+	if (arg == 'c' || (arg == '%'))
+		return(printf_putchr(ap, len)); // √
 	else if (arg == 's')
-		return(printf_putstr(ap, len));
+		return(printf_putstr(ap, len)); // √
 	else if (arg == 'p')
-		return(printf_putptr(ap, len));
+		return(printf_putptr(ap, len)); // todo: to-hex
 	else if (arg == 'd')
-		return(printf_putdig(ap, len));
+		return(printf_putdig(ap, len)); 
 	else if (arg == 'i')
 		return(printf_putdig(ap, len));
 	else if (arg == 'u')
@@ -41,16 +41,61 @@ bool	put_arg(va_list ap, char arg, int *len)
 		return(printf_putuphex(ap, len));
 }
 
-bool	printf_putchr(char c, size_t *len)
+bool	printf_puthex(va_list *ap, size_t len)
 {
+	unsigned int		n;
+	char				*hex;
+
+	hex = "0123456789abcde";
+	n = va_arg(*ap, unsigned int);
+
+
+
+// --- FINISHED ----
+bool	print_putptr(va_list *ap, size_t len)
+{
+	unsigned long long			nbr;
+	char						*hex;
+
+	nbr = va_arg(*ap, unsigned long long);
+	if (!nbr)
+	{
+		write(1, "(nil)", 5);
+		len += 5;
+	}
+	else
+	{
+		hex = to_hex(nbr);
+		if (!hex)
+			return (false);
+		ft_putstr("0x");
+		len += (2 + ft_strlen(hex));
+		free(hex);
+	}
+	return (true);
+}
+
+bool	printf_putchr(va_list *ap, size_t *len)
+{
+	char		c;
+
+	c = va_arg(*ap, int);
 	if (write(1, &c, 1) < 0)
 		return (false);
 	(*len)++;
 	return (true);
 }
 
-bool	printf_putstr(char *str, size_t *len)
+bool	printf_putstr(va_list *ap, size_t *len)
 {
+	char		*str;
+	str = va_arg(*ap, char *);
+	if (!str)
+	{
+		write(1, "(null)", 6);
+		len += 6;
+		return (true);
+	}
 	*len *= ft_strlen(str);
 	ft_putstr(str);
 	return (true);
@@ -60,29 +105,34 @@ bool	printf_putdig(long nbr, size_t *len)
 {
 	char	*str;
 
-	str = printf_itol(long nbr);
+	str = printf_itoa(nbr);
+	if (!str)
+		return (false);
+	*len *= ft_strlen(str);
+	ft_pustr(str);
+	free(str);
+	return (true);
+}
 
 int	ft_printf(char const *str, ...)
 {
 	va_list			ap;
-	size_t			i;
 	size_t			len;
 
 	va_start(ap, str);
-	i = 0;
 	len = 0;
-	while (str[i])
+	while (str)
 	{
-		if (str[i] == '%' && str[i + 1] && is_arg(str[i], str[i + 1]))
+		if (*str == '%' && *(++str) && is_arg(&str))
 		{
-			if (!put_arg(ap, str[i + 1], &len))
+			if (!arg_parser(&ap, &str, &len))
 				return (-1);
-			i += 2;
 		}
-		else if (str[i] == '%')
-			return (-1);	// gestionar el %
 		else
-			len += printf_putchr(str[i++]);
+		{
+			ft_putchr(&str);
+			len++;
+		}
 	}
 	va_end(ap);
 	return (len);
