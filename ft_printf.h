@@ -6,7 +6,7 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 17:44:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/26 13:35:21 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/27 12:42:08 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@
 
 // ********* DATA STRUCTS **********
 
-typedef enum
+typedef enum e_error
 {
 	OK,
-	MALLOC_ERROR,
-}	e_error;
+	MALLOC_ERROR
+}	t_error;
 
 
 // ********** PROTOTYPES ***********

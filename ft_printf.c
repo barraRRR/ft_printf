@@ -6,13 +6,15 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 17:42:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/26 22:17:08 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/27 12:41:52 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft/libft.h"
 
+
+// ****** PARSING FUNCTIONS ******
 bool	is_arg(char c2)
 {
 	if (c2 == 'c' || c2 == 's' || c2 == 'p' || c2 == 'd'
@@ -28,27 +30,44 @@ bool	arg_parser(va_list *ap, char arg, int *len)
 	else if (arg == 's')
 		return(printf_putstr(ap, len)); // √
 	else if (arg == 'p')
-		return(printf_putptr(ap, len)); // todo: to-hex
+		return(printf_putptr(ap, len)); // v
 	else if (arg == 'd')
-		return(printf_putdig(ap, len)); 
+		return(printf_putdig(ap, len)); // v
 	else if (arg == 'i')
-		return(printf_putdig(ap, len));
+		return(printf_putdig(ap, len)); // v
 	else if (arg == 'u')
-		return(printf_putdig(ap, len)); // unsigned
+		return(printf_putun(ap, len)); // v
 	else if (arg == 'x')
-		return(printf_puthex(ap, len));
+		return(printf_puthex(ap, len)); // todo
 	else if (arg == 'X')
-		return(printf_putuphex(ap, len));
+		return(printf_putuphex(ap, len)); // v
 }
 
-void	to_hex(char *buf, unsigned int n)
+// *************************************
+
+
+
+
+
+// ****** POINTER & HEX ******
+
+void	hex_cat(char *buf, char hex)
+{
+	char	*ptr;
+
+	while(*ptr)
+		*ptr++;
+	*ptr = hex;
+}
+
+void	to_hex(char *buf, unsigned long long n)
 {
 	char				*hex;
 
 	hex = "0123456789abcdef";
 	if (n >= 16)
 		to_hex(buf, n / 16);
-	ft_strlcat(buf, &hex[n % 16], 20); // ojo que no entra porque no va a contar bien destlen
+	hex_cat(buf, &hex[n % 16]); // ojo que no entra porque no va a contar bien destlen
 }
 
 bool	printf_puthex(va_list *ap, size_t *len)
@@ -68,6 +87,26 @@ bool	printf_puthex(va_list *ap, size_t *len)
 	return (true);
 }
 
+bool	printf_putuphex(va_list *ap, size_t *len)
+{
+	unsigned int		n;
+	char				*buf;
+	size_t				i;
+
+	n = va_arg(*ap, unsigned int);
+	buf = malloc(sizeof(char) * 20);
+	if (!buf)
+		return (false);
+	ft_memset(buf, 0, 20);
+	to_hex(buf, n);
+	*len += ft_strlen(buf);
+	i = 0;
+	while (str[i])
+		topper(str[i++]);
+	ft_putstr(buf);
+	free(buf);
+	return (true);
+}
 
 
 
@@ -76,23 +115,26 @@ bool	printf_puthex(va_list *ap, size_t *len)
 // --- FINISHED ----
 bool	print_putptr(va_list *ap, size_t len)
 {
-	unsigned long long			nbr;
+	unsigned long long			n;
 	char						*hex;
+	char						*buf;
 
-	nbr = va_arg(*ap, unsigned long long);
-	if (!nbr)
+	n = va_arg(*ap, unsigned long long);
+	if (!n)
 	{
 		write(1, "(nil)", 5);
 		len += 5;
 	}
 	else
 	{
-		hex = to_hex(nbr);
-		if (!hex)
+		buf = malloc(sizeof(char) * 20);
+		if (!buf)
 			return (false);
+		ft_memset(buf, 0, 20);
+		to_hex(buf, n);
 		ft_putstr("0x");
 		len += (2 + ft_strlen(hex));
-		free(hex);
+		free(buf);
 	}
 	return (true);
 }
@@ -111,14 +153,15 @@ bool	printf_putchr(va_list *ap, size_t *len)
 bool	printf_putstr(va_list *ap, size_t *len)
 {
 	char		*str;
+
 	str = va_arg(*ap, char *);
 	if (!str)
 	{
 		write(1, "(null)", 6);
-		len += 6;
+		*len += 6;
 		return (true);
 	}
-	*len *= ft_strlen(str);
+	*len += ft_strlen(str);
 	ft_putstr(str);
 	return (true);
 }

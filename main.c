@@ -2,6 +2,6 @@
 
 int	main(void)
 {
-	printf("que tal t%? hacia % tiempo %q no te veia\n");
+	printf("que tal t%s? hacia %s tiempo %s no te veia% \n", "hola", "dylan", "goddguy");
 	return (0);
 }
