@@ -6,7 +6,7 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 17:42:36 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/27 12:41:52 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/27 16:11:33 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,31 @@ bool	arg_parser(va_list *ap, char arg, int *len)
 	else if (arg == 'i')
 		return(printf_putdig(ap, len)); // v
 	else if (arg == 'u')
-		return(printf_putun(ap, len)); // v
+		return(printf_putun(ap, len)); // todo
 	else if (arg == 'x')
-		return(printf_puthex(ap, len)); // todo
+		return(printf_puthex(ap, len)); // v
 	else if (arg == 'X')
 		return(printf_putuphex(ap, len)); // v
 }
 
 // *************************************
 
-
-
-
+bool	putun(va_list *ap, size_t *len)
+{
+	unsigned long		n;
+	char				*str;
+	
+	n = va_arg(*ap, long);
+	str = printf_itoa(n);
+	if (!str)
+		return (false);
+	*len += ft_strlen(str);
+	ft_pustr(str);
+	free(str);
+	return (true);
+}
 
 // ****** POINTER & HEX ******
-
 void	hex_cat(char *buf, char hex)
 {
 	char	*ptr;
@@ -166,14 +176,16 @@ bool	printf_putstr(va_list *ap, size_t *len)
 	return (true);
 }
 
-bool	printf_putdig(long nbr, size_t *len)
+bool	printf_putdig(va_list *ap, size_t *len)
 {
-	char	*str;
+	long		n;
+	char		*str;
 
-	str = printf_itoa(nbr);
+	n = va_arg(*ap, long);
+	str = printf_itoa(n);
 	if (!str)
 		return (false);
-	*len *= ft_strlen(str);
+	*len += ft_strlen(str);
 	ft_pustr(str);
 	free(str);
 	return (true);

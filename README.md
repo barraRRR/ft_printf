@@ -10,6 +10,13 @@ else
 	funcion que devuelve len y error
 
 
+
+
+Print formatted data to stdout
+Writes the C string pointed by format to the standard output (stdout). If format includes format specifiers (subsequences beginning with %), the additional arguments following format are formatted and inserted in the resulting string replacing their respective specifiers.
+
+
+
 Resources
 
 https://www.it.uc3m.es/pbasanta/asng/course_notes/input_output_printf_es.html
