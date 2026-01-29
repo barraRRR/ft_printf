@@ -6,7 +6,7 @@
 /*   By: jbarreir <jbarreir@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 07:52:48 by jbarreir          #+#    #+#             */
-/*   Updated: 2026/01/28 08:48:54 by jbarreir         ###   ########.fr       */
+/*   Updated: 2026/01/29 11:40:41 by jbarreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,14 @@ ssize_t	printf_puthex(unsigned long long n, char const *hex)
 	return (len);
 }
 
-/*		*** LINUX VERSION ***
-		len = printf_strlen("(nil)");
-		write(1, "(nil)", len);
-*/
 ssize_t	printf_putptr(unsigned long ptr)
 {
 	ssize_t		len;
 
 	if (!ptr)
 	{
-		len = printf_strlen("0x0");
-		write(1, "0x0", len);
+		len = printf_strlen("(nil)");
+		write(1, "(nil)", len);
 		return (len);
 	}
 	len = printf_putstr("0x");
